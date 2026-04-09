@@ -45,30 +45,34 @@ void desenha_pixel_em_xy(int x, int y, Pixel *pixel) {
     pixel->canais.r, pixel->canais.g, pixel->canais.b);
 }
 
+void copiar_image(int n, int origem[n][n], Pixel destino[n][n]) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            // Atribui o valor inteiro da origem ao campo 'cor' da união Pixel
+            destino[i][j].cor = origem[i][j];
+        }
+    }
+}
 
-int main()
-{
-    Pixel pixels[3][3] = {
-        {{.cor = 0x0000FFFF}, {.cor = 0x0000FFFF}, {.cor = 0x0000FFFF}},
-        {{.cor = 0x0000FFFF}, {.cor = 0xFF0000FF}, {.cor = 0x0000FFFF}},
-        {{.cor = 0x0000FFFF}, {.cor = 0x0000FFFF}, {.cor = 0x0000FFFF}}
-    };
-    // LINHA 10
-    desenha_pixel_em_xy(10,10, &pixels[0][0]);
-    desenha_pixel_em_xy(11,10, &pixels[0][1]);
-    desenha_pixel_em_xy(12,10, &pixels[0][2]);
-    
-     // LINHA 11
-    desenha_pixel_em_xy(10,11, &pixels[1][0]);
-    desenha_pixel_em_xy(11,11, &pixels[1][1]);
-    desenha_pixel_em_xy(12,11, &pixels[1][2]);
-    
-     // LINHA 12
-    desenha_pixel_em_xy(10,12, &pixels[2][0]);
-    desenha_pixel_em_xy(11,12, &pixels[2][1]);
-    desenha_pixel_em_xy(12,12, &pixels[2][2]);
-    
-    
+int main() {
+    int n = 10;
+    // 1. Criamos a matriz de destino do tipo Pixel com o tamanho n
+    Pixel destino[n][n];
+
+    // 2. Chamamos a função para copiar os dados da matriz 'imagem' (global)
+    copiar_image(n, imagem, destino);
+
+    // 3. Opcional: Limpar a tela e desenhar a imagem copiada para testar
+    limpar_tela();
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            // Note que passamos o endereço (&) do pixel
+            desenha_pixel_em_xy(j, i, &destino[i][j]);
+        }
+    }
+
+    // Move o cursor para baixo para não sobrepor o prompt do terminal
+    printf("\033[%d;1H\n", n + 1);
 
     return 0;
 }
